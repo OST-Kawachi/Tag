@@ -63,4 +63,5 @@ public class PlayerObjectController : MonoBehaviour {
             renderer.material.color = color;
         }
     }
+
 }

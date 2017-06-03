@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerMove : MonoBehaviour {
-
-    private float moveX = 0;
-    private float moveZ = 0;
-    private float turn = 0;
+    private float speed = 0.3f;
 
     private static KeyCode moveRight = KeyCode.A;
     private static KeyCode moveLeft = KeyCode.D;
@@ -18,36 +16,72 @@ public class PlayerMove : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        InputKeyMoveTranslate();
+        InputKeyTurn();
+        CrossPlatformInputMoveTranslate();
+    }
+
+    void InputKeyMoveTranslate() {
+        float x = 0;
+        float z = 0;
         if (Input.GetKey(moveLeft) && !Input.GetKey(moveRight))
         {
-            moveX = 0.2f;
+            x = 1.0f;
 
-        } else if (Input.GetKey(moveRight) && !Input.GetKey(moveLeft))
+        }
+        else if (Input.GetKey(moveRight) && !Input.GetKey(moveLeft))
         {
-            moveX = -0.2f;
-        } else
+            x = -1.0f;
+        }
+        else
         {
-            moveX = 0;
+            x = 0;
         }
 
         if (Input.GetKey(moveForWard) && !Input.GetKey(moveBack))
         {
-            moveZ = 0.2f;
+            z =1.0f;
         }
         else if (Input.GetKey(moveBack) && !Input.GetKey(moveForWard))
         {
-            moveZ = -0.2f;
+            z = -1.0f;
         }
-        else {
-            moveZ = 0;
+        else
+        {
+            z = 0;
         }
 
-        transform.Translate(moveX, 0, moveZ, Space.Self);
+        Vector3 direction = new Vector3(x, 0, z).normalized;
+        TranslateMove(direction);
+    }
+
+    void CrossPlatformInputMoveTranslate() {
+        // 右・左
+        float x = CrossPlatformInputManager.GetAxisRaw("Horizontal");
+
+        // 上・下
+        float z = CrossPlatformInputManager.GetAxisRaw("Vertical");
+
+        // 移動Vector
+        Vector3 direction = new Vector3(x, 0, z).normalized;
+
+        TranslateMove(direction);
+    }
+
+    private void TranslateMove(Vector3 direction)
+    {
+        direction.x *= speed;
+        direction.z *= speed;
+        transform.position += direction;
+    }
+
+    void InputKeyTurn() {
+        float turn = 0;
 
         if (Input.GetKey(turnRight) && !Input.GetKey(turnLeft))
         {
@@ -57,10 +91,12 @@ public class PlayerMove : MonoBehaviour {
         {
             turn = -1;
         }
-        else {
+        else
+        {
             turn = 0;
         }
 
         transform.Rotate(0, turn, 0);
     }
+
 }
