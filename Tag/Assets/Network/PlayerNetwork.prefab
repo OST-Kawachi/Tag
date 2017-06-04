@@ -1132,6 +1132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.3
   turnSpeed: 1
+  gyroText: {fileID: 0}
 --- !u!124 &124618918033627428
 Behaviour:
   m_ObjectHideFlags: 1
