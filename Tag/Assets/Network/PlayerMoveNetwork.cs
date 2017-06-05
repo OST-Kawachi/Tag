@@ -16,18 +16,11 @@ public class PlayerMoveNetwork : NetworkBehaviour
 
     private CharacterController charaCtrl;
 
-    private Text gyroText;
-
-    private Quaternion preGyro;
-
     // Use this for initialization
     void Start()
     {
-        Input.gyro.enabled = true;
-        preGyro = Input.gyro.attitude;
         charaCtrl = gameObject.GetComponent<CharacterController>();
         pmn = GetComponent<PlayerManagerNetwork>();
-        gyroText = GameObject.Find("Canvas").transform.Find("GyroText").GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -38,7 +31,7 @@ public class PlayerMoveNetwork : NetworkBehaviour
             InputKeyTurn();
             CrossPlatformInputMoveTranslate();
             CrossPlatformTurn();
-            GyroTurn();
+            
         }
     }
 
@@ -93,29 +86,5 @@ public class PlayerMoveNetwork : NetworkBehaviour
         float x = CrossPlatformInputManager.GetAxisRaw("HorizontalCam");
         //transform.Rotate(0, x * turnSpeed, 0);
         transform.rotation *= Quaternion.AngleAxis(turnSpeed, new Vector3(0, x, 0));
-    }
-
-    void GyroTurn() {
-        /* iosはx軸回転が画面右倒ししたときの水平方向?
-           wの値もちゃんと考慮が必要そう　値の変化的に　難しい
-        */
-        float diff = 0;
-        Quaternion gyro = Input.gyro.attitude;
-
-        diff = gyro.x - preGyro.x;
-        //diff = gyro.y - preGyro.y;
-        //diff = gyro.z - preGyro.z;
-
-        gyroText.text = "Gyro"
-            + " x:" + gyro.x.ToString("f2") 
-            + " y:" + gyro.y.ToString("f2") 
-            + " z:" + gyro.z.ToString("f2") 
-            + " w:" + gyro.w.ToString("f2");
-
-        if (diff >= 0.005f || diff <= -0.005f) {
-            transform.rotation *= Quaternion.AngleAxis(turnSpeed, new Vector3(0, diff, 0));
-        }
-
-        preGyro = gyro;
     }
 }
