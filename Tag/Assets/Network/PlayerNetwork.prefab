@@ -76,7 +76,6 @@ GameObject:
   - component: {fileID: 114979070179953362}
   - component: {fileID: 114688354745069458}
   - component: {fileID: 136152516340825148}
-  - component: {fileID: 114583020188889150}
   m_Layer: 0
   m_Name: PlayerNetwork
   m_TagString: Escape
@@ -186,6 +185,7 @@ GameObject:
   - component: {fileID: 124618918033627428}
   - component: {fileID: 92088463864838796}
   - component: {fileID: 81554355907395330}
+  - component: {fileID: 114943022770271790}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: Player
@@ -1102,17 +1102,6 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
---- !u!114 &114583020188889150
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1384792533343428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6c554f9bbbd9415e8ef091fd5b4103d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114688354745069458
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1131,6 +1120,18 @@ MonoBehaviour:
   oniSet: 0
   playerUniqueNumber: 0
   boolMove: 0
+--- !u!114 &114943022770271790
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1680183901615504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6c554f9bbbd9415e8ef091fd5b4103d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerObject: {fileID: 1032831486189426}
 --- !u!114 &114979070179953362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1144,6 +1145,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.3
   turnSpeed: 1
+  playerObject: {fileID: 1032831486189426}
 --- !u!124 &124618918033627428
 Behaviour:
   m_ObjectHideFlags: 1

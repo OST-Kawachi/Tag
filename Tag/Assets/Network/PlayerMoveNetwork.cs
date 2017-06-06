@@ -16,6 +16,8 @@ public class PlayerMoveNetwork : NetworkBehaviour
 
     private CharacterController charaCtrl;
 
+	public GameObject playerObject;
+
     // Use this for initialization
     void Start()
     {
@@ -30,8 +32,6 @@ public class PlayerMoveNetwork : NetworkBehaviour
             InputKeyMove();
             InputKeyTurn();
             CrossPlatformInputMoveTranslate();
-            CrossPlatformTurn();
-            
         }
     }
 
@@ -54,7 +54,7 @@ public class PlayerMoveNetwork : NetworkBehaviour
         float z = CrossPlatformInputManager.GetAxisRaw("Vertical");
 
         // 移動Vector
-        Vector3 direction = transform.right * x + transform.forward * z;
+		Vector3 direction = playerObject.transform.right * x + playerObject.transform.forward * z;
         //TranslateMove(direction);
         charaCtrl.Move(direction * speed);
     }
@@ -80,11 +80,5 @@ public class PlayerMoveNetwork : NetworkBehaviour
 
         //transform.Rotate(0, turn * turnSpeed, 0);
         transform.rotation *= Quaternion.AngleAxis(turnSpeed, new Vector3(0, turn, 0));
-    }
-
-    void CrossPlatformTurn() {
-        float x = CrossPlatformInputManager.GetAxisRaw("HorizontalCam");
-        //transform.Rotate(0, x * turnSpeed, 0);
-        transform.rotation *= Quaternion.AngleAxis(turnSpeed, new Vector3(0, x, 0));
     }
 }
