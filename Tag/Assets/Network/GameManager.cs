@@ -31,23 +31,23 @@ public class GameManager : NetworkBehaviour {
 	
     IEnumerator StartTurm() {
         yield return new WaitForSeconds(1);
-        //OniSelect(OniNumGet(EscapePerOni));
-        playerNum = playerList.Count;
-        OniInitRandom(OniNumGet(EscapePerOni));
-        centerText.text = "鬼決定！";
+		//OniSelect(OniNumGet(EscapePerOni));
+		this.playerNum = playerList.Count;
+        OniInitRandom(OniNumGet( this.EscapePerOni ));
+		this.centerText.text = "鬼決定！";
         yield return new WaitForSeconds(1);
-        OniSelect(oniInitList);
- 
-        centerText.text = "3";
+        OniSelect( this.oniInitList );
+
+		this.centerText.text = "3";
         yield return new WaitForSeconds(1);
-        centerText.text = "2";
+		this.centerText.text = "2";
         yield return new WaitForSeconds(1);
-        centerText.text = "1";
+		this.centerText.text = "1";
         yield return new WaitForSeconds(1);
-        centerText.text = "START";
+		this.centerText.text = "START";
         yield return new WaitForSeconds(1);
-        centerText.text = "";
-        for (int i = 0; i < playerNum; i++ ) {
+		this.centerText.text = "";
+        for (int i = 0; i < this.playerNum ; i++ ) {
             playerList[i].m_Instance.GetComponent<PlayerManagerNetwork>().boolMove = true;
         }
     }
@@ -70,30 +70,31 @@ public class GameManager : NetworkBehaviour {
 
     void OniSelect(SyncListInt oniArray)
     {
-        foreach (var oni in oniArray)
+        foreach ( int oni in oniArray)
         {
             playerList[oni].m_Instance.GetComponent<PlayerManagerNetwork>().OniSet();
         }
     }
 
     int OniNumGet(int num) {
-        return playerNum / num + 1;
+        return this.playerNum / num + 1;
     }
 
     static public void AddPlayer(GameObject player, string name, int id)
     {
-        PlayerInfo playerInfo = new PlayerInfo();
-        playerInfo.m_Instance = player;
-        playerInfo.m_PlayerName = name;
-        playerInfo.m_LocalPlayerID = id;
+		PlayerInfo playerInfo = new PlayerInfo() {
+			m_Instance = player ,
+			m_PlayerName = name ,
+			m_LocalPlayerID = id
+		};
 
-        playerList.Add(playerInfo);
+		playerList.Add(playerInfo);
     }
 
     public void RemovePlayer(GameObject player)
     {
         PlayerInfo toRemove = null;
-        foreach (var tmp in playerList)
+        foreach ( PlayerInfo tmp in playerList)
         {
             if (tmp.m_Instance == player)
             {
@@ -118,9 +119,9 @@ public class GameManager : NetworkBehaviour {
         {
             while (true)
             {
-                rand = Random.Range(0, playerNum);
+                rand = Random.Range(0, this.playerNum );
                 if (playerList[rand].m_Instance.GetComponent<PlayerManagerNetwork>().oniSet) { continue; }
-                oniInitList.Add(rand);
+				this.oniInitList.Add(rand);
                 break;
             }
         }

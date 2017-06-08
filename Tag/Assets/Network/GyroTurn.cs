@@ -17,15 +17,15 @@ public class GyroTurn : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(Input.gyro.enabled){
-			gyro = Input.gyro.attitude;
+			this.gyro = Input.gyro.attitude;
 			//iOS 用の回転
-			turn = new Quaternion (-gyro.x, -gyro.z, -gyro.y, gyro.w) * Quaternion.Euler (90f, 0f, 0f);
+			this.turn = new Quaternion (-this.gyro.x, -this.gyro.z, -this.gyro.y, this.gyro.w) * Quaternion.Euler (90f, 0f, 0f);
 			//Android 用の回転
 			//turn = new Quaternion (-gyro.x, gyro.y, -gyro.z, gyro.w) * Quaternion.Euler (90f, 0f, 0f);
 
 			//Camera turn
-			transform.localRotation = turn;
-			playerObject.transform.rotation = Quaternion.AngleAxis (turn.eulerAngles.y, new Vector3 (0, 1, 0));
+			this.transform.localRotation = this.turn;
+			this.playerObject.transform.rotation = Quaternion.AngleAxis ( this.turn.eulerAngles.y, new Vector3 (0, 1, 0));
 		}
 	}
 }

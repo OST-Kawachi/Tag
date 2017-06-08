@@ -21,14 +21,14 @@ public class PlayerMoveNetwork : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
-        charaCtrl = gameObject.GetComponent<CharacterController>();
-        pmn = GetComponent<PlayerManagerNetwork>();
+        this.charaCtrl = this.gameObject.GetComponent<CharacterController>();
+		this.pmn = GetComponent<PlayerManagerNetwork>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (pmn.boolMove && isLocalPlayer) {
+        if ( this.pmn.boolMove && this.isLocalPlayer ) {
             InputKeyMove();
             InputKeyTurn();
             CrossPlatformInputMoveTranslate();
@@ -40,9 +40,9 @@ public class PlayerMoveNetwork : NetworkBehaviour
         float z = Input.GetAxis("Vertical");
 
         // 移動Vector
-        Vector3 direction = transform.right * x + transform.forward * z;
-        //TranslateMove(direction);
-        charaCtrl.Move(direction * speed * 0.1f);
+        Vector3 direction = this.transform.right * x + this.transform.forward * z;
+		//TranslateMove(direction);
+		this.charaCtrl.Move(direction * this.speed * 0.1f);
     }
 
     void CrossPlatformInputMoveTranslate()
@@ -54,9 +54,9 @@ public class PlayerMoveNetwork : NetworkBehaviour
         float z = CrossPlatformInputManager.GetAxisRaw("Vertical");
 
         // 移動Vector
-		Vector3 direction = playerObject.transform.right * x + playerObject.transform.forward * z;
-        //TranslateMove(direction);
-        charaCtrl.Move(direction * speed);
+		Vector3 direction = this.playerObject.transform.right * x + this.playerObject.transform.forward * z;
+		//TranslateMove(direction);
+		this.charaCtrl.Move(direction * this.speed );
     }
 
     void InputKeyTurn()
@@ -78,7 +78,7 @@ public class PlayerMoveNetwork : NetworkBehaviour
             turn = 0;
         }
 
-        //transform.Rotate(0, turn * turnSpeed, 0);
-        transform.rotation *= Quaternion.AngleAxis(turnSpeed, new Vector3(0, turn, 0));
+		//transform.Rotate(0, turn * turnSpeed, 0);
+		this.transform.rotation *= Quaternion.AngleAxis( this.turnSpeed , new Vector3(0, turn, 0));
     }
 }

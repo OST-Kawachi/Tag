@@ -18,16 +18,16 @@ public class PlayerManagerNetwork : NetworkBehaviour
 
     public void Awake()
     {
-        GameManager.AddPlayer(gameObject, "player", 1);
+        GameManager.AddPlayer(this.gameObject, "player", 1);
     }
 
     public void Start()
     {
         InitColorSet();
         ObjectSet();
-        if (!isLocalPlayer)
+        if (!this.isLocalPlayer)
         {
-            gameObject.transform.Find("PlayerCamera").gameObject.SetActive(false);
+			this.gameObject.transform.Find("PlayerCamera").gameObject.SetActive(false);
         }
 
     }
@@ -35,7 +35,7 @@ public class PlayerManagerNetwork : NetworkBehaviour
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         //Debug.Log(hit.gameObject.name);
-        if (gameObject.tag == "Oni")
+        if ( this.gameObject.tag == "Oni")
         {
             if (hit.gameObject.tag == "Escape")
             {
@@ -54,18 +54,18 @@ public class PlayerManagerNetwork : NetworkBehaviour
 
     public void OniSet()
     {
-        oniSet = true;
-        oniObject.SetActive(true);
-        escapeObject.SetActive(false);
-        gameObject.tag = "Oni";
+		this.oniSet = true;
+		this.oniObject.SetActive(true);
+		this.escapeObject.SetActive(false);
+		this.gameObject.tag = "Oni";
     }
 
     public void EscapeSet()
     {
-        oniSet = false;
-        oniObject.SetActive(false);
-        escapeObject.SetActive(true);
-        gameObject.tag = "Escape";
+		this.oniSet = false;
+		this.oniObject.SetActive(false);
+		this.escapeObject.SetActive(true);
+		this.gameObject.tag = "Escape";
     }
 
     void ColorSet(GameObject gameObject, Color color)
@@ -80,13 +80,13 @@ public class PlayerManagerNetwork : NetworkBehaviour
 
     void InitColorSet()
     {
-        ColorSet(oniObject, oniColor);
-        ColorSet(escapeObject, escapeColor);
+        ColorSet( this.oniObject , this.oniColor );
+        ColorSet( this.escapeObject , this.escapeColor );
     }
 
     void ObjectSet()
     {
-        if (oniSet) {
+        if ( this.oniSet ) {
             OniSet();
         } else {
             EscapeSet();
@@ -96,7 +96,7 @@ public class PlayerManagerNetwork : NetworkBehaviour
 
     public override void OnNetworkDestroy()
     {
-        Debug.Log("destroy" + gameObject.name);
-        GameManager.s_Instance.RemovePlayer(gameObject);
+        Debug.Log("destroy" + this.gameObject.name);
+        GameManager.s_Instance.RemovePlayer( this.gameObject );
     }
 }
