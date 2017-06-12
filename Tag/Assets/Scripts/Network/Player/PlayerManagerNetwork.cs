@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Network.Manager;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Network.Player {
@@ -84,7 +85,7 @@ namespace Network.Player {
 
 		public override void OnNetworkDestroy() {
 			Debug.Log( "destroy" + this.gameObject.name );
-			GameManager.s_Instance.RemovePlayer( this.gameObject );
+			GameManager.Instance.RemovePlayer( this.gameObject );
 		}
 	}
 
