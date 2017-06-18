@@ -1,20 +1,26 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using UnityStandardAssets.CrossPlatformInput;
+using System.Collections;
 
 namespace Network.Player {
 
 	public class PlayerMoveNetwork : NetworkBehaviour {
-		public float speed = 0.01f;
+		public float speed = 10.0f;
 		public float turnSpeed = 5.0f;
+		public float gravity = -10.0f;
+		public float jumpPower = 10.0f;
 
 		private PlayerManagerNetwork pmn;
 		private static KeyCode turnRight = KeyCode.J;
 		private static KeyCode turnLeft = KeyCode.K;
 
 		private CharacterController charaCtrl;
+		private bool jump = false;
 
 		public GameObject playerObject;
+
+		private Vector3 moveDirection = Vector3.zero;
 
 		// Use this for initialization
 		void Start() {
@@ -24,10 +30,23 @@ namespace Network.Player {
 
 		// Update is called once per frame
 		void Update() {
-			if( this.pmn.boolMove && this.isLocalPlayer ) {
-				InputKeyMove();
-				InputKeyTurn();
-				CrossPlatformInputMoveTranslate();
+			if (this.pmn.boolMove) {
+				if (charaCtrl.isGrounded) {
+					moveDirection = Vector3.zero;
+					if (this.isLocalPlayer) {
+						InputKeyMove ();
+						InputKeyTurn ();
+						CrossPlatformInputMoveTranslate ();
+						CrossPlatformInputJump ();
+					}
+				} else {
+					if (jump) {
+						this.charaCtrl.Move (this.playerObject.transform.up * jumpPower * Time.deltaTime 
+							+ moveDirection * this.speed * Time.deltaTime);
+					} else {
+						GravitySet ();
+					}
+				}
 			}
 		}
 
@@ -49,9 +68,21 @@ namespace Network.Player {
 			float z = CrossPlatformInputManager.GetAxisRaw( "Vertical" );
 
 			// 移動Vector
-			Vector3 direction = this.playerObject.transform.right * x + this.playerObject.transform.forward * z;
+			moveDirection = this.playerObject.transform.right * x + this.playerObject.transform.forward * z;
 			//TranslateMove(direction);
-			this.charaCtrl.Move( direction * this.speed );
+			this.charaCtrl.Move( moveDirection * this.speed * Time.deltaTime);
+		}
+
+		void CrossPlatformInputJump(){
+			jump = CrossPlatformInputManager.GetButton ("Jump");
+			if(jump){
+				StartCoroutine (Jump ());
+			}
+		}
+
+		void GravitySet(){
+			this.charaCtrl.Move (this.playerObject.transform.up * gravity * Time.deltaTime 
+				+ moveDirection * this.speed * Time.deltaTime);
 		}
 
 		void InputKeyTurn() {
@@ -72,6 +103,12 @@ namespace Network.Player {
 			//transform.Rotate(0, turn * turnSpeed, 0);
 			this.transform.rotation *= Quaternion.AngleAxis( this.turnSpeed , new Vector3( 0 , turn , 0 ) );
 		}
-	}
 
+		IEnumerator Jump() {
+			this.charaCtrl.Move (this.playerObject.transform.up * jumpPower * Time.deltaTime 
+				+ moveDirection * this.speed * Time.deltaTime);
+			yield return new WaitForSeconds (0.5f);
+			jump = false;
+		}
+	}
 }

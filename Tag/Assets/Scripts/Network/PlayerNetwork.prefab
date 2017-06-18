@@ -522,13 +522,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1680183901615504}
-  m_LocalRotation: {x: 0.043619405, y: 0, z: 0, w: 0.9990483}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4234585039161412}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 5, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4874809060988002
 Transform:
   m_ObjectHideFlags: 1
@@ -1110,16 +1110,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1384792533343428}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4bdfa8e41f6dc847954d969d74d0407, type: 3}
+  m_Script: {fileID: 11500000, guid: c65c7b0d74641d64d82b6f6d1e1420af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oniObject: {fileID: 1715174802074846}
-  escapeObject: {fileID: 1978423475360092}
-  oniColor: {r: 1, g: 0.50735295, b: 0.50735295, a: 0}
-  escapeColor: {r: 0.5735294, g: 0.8058824, b: 1, a: 0}
-  oniSet: 0
-  playerUniqueNumber: 0
-  boolMove: 0
+  speed: 10
+  turnSpeed: 5
+  gravity: -10
+  jumpPower: 10
+  playerObject: {fileID: 1032831486189426}
 --- !u!114 &114943022770271790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1128,7 +1126,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1680183901615504}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6c554f9bbbd9415e8ef091fd5b4103d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6faa7b366b90d489983b9cc70c95f6d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerObject: {fileID: 1032831486189426}
@@ -1140,12 +1138,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1384792533343428}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b175cdaba18b404986fbc3c606ce563, type: 3}
+  m_Script: {fileID: 11500000, guid: 577d8338a72e1e94ba1414a7ee12995c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.3
-  turnSpeed: 1
-  playerObject: {fileID: 1032831486189426}
+  oniObject: {fileID: 1715174802074846}
+  escapeObject: {fileID: 1978423475360092}
+  oniColor: {r: 0.9852941, g: 0.44917822, b: 0.44917822, a: 0}
+  escapeColor: {r: 0.43382353, g: 0.90628797, b: 1, a: 0}
+  oniSet: 0
+  playerUniqueNumber: 0
+  boolMove: 0
 --- !u!124 &124618918033627428
 Behaviour:
   m_ObjectHideFlags: 1
