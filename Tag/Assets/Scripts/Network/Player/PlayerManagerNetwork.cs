@@ -44,6 +44,7 @@ namespace Network.Player {
 		public void RpcOniTouch( GameObject escape ) {
 			EscapeSet();
 			escape.GetComponent<PlayerManagerNetwork>().OniSet();
+			GameManager.OniPlayerSetInfo (escape);
 		}
 
 		public void OniSet() {
