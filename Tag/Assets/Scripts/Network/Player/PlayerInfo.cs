@@ -11,6 +11,7 @@ namespace Network.Player {
 		public int m_OniNum;
 		public float m_OniTime;
 		public bool m_OniStatus;
+		public int m_rank;
 	}
 
 }
