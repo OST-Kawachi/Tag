@@ -66,6 +66,8 @@ namespace Network.Player {
 
 			foreach( Renderer renderer in renderers ) {
 				renderer.material.color = color;
+				renderer.material.EnableKeyword ("_EMISSION");
+				renderer.material.SetColor ("_EmissionColor", color);
 			}
 		}
 
