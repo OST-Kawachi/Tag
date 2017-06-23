@@ -28,7 +28,7 @@ namespace Network.Manager {
 		//IntList oniInitList = new IntList();
 		public SyncListInt oniInitList = new SyncListInt();
 
-		static public float playTimeMax = 180f;
+		static public float playTimeMax = 300f;
 		private float playtime = 0;
 
 		static public float OniTimeStart = 0;
