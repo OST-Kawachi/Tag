@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Net;
+using UnityEngine;
 
 namespace Common {
 
@@ -19,6 +20,29 @@ namespace Common {
 			foreach( Renderer renderer in renderers ) {
 				renderer.material.color = color;
 			}
+
+		}
+
+		/// <summary>
+		/// 自身のIPV4アドレスを取得する
+		/// </summary>
+		/// <returns></returns>
+		public static string GetMyIpv4() {
+
+			string ipv4 = null;
+
+			IPHostEntry ipHostEntry = Dns.GetHostEntry( Dns.GetHostName() );
+			foreach( IPAddress ipAddress in ipHostEntry.AddressList ) {
+				// IPV4のアドレス
+				if( ipAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork ) {
+					ipv4 = ipAddress.ToString();
+				}
+			}
+
+			if( ipv4 == null )
+				Debug.LogWarning( "IPV4アドレスが取得できませんでした" );
+
+			return ipv4;
 
 		}
 
