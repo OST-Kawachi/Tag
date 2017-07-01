@@ -128,7 +128,7 @@ PlayerSettings:
   protectGraphicsMemory: 0
   useHDRDisplay: 0
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 9
+  AndroidMinSdkVersion: 16
   AndroidPreferredInstallLocation: 1
   aotOptions: 
   apiCompatibilityLevel: 2

@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using System.Collections.Generic;
+using Common;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ namespace Lobby {
 		/// ロビー管理
 		/// </summary>
 		public NetworkLobbyManager networkLobbyManager;
-				
+		
 		/// <summary>
 		/// 参加前に自分のIPを表示するテキスト
 		/// </summary>
@@ -39,6 +40,11 @@ namespace Lobby {
 		/// 部屋名のIPアドレス表示欄
 		/// </summary>
 		public Text roomIpText;
+
+		/// <summary>
+		/// 参加者一覧を表示するテキスト
+		/// </summary>
+		public Text MemberText;
 
 		/// <summary>
 		/// 準備完了ボタン
@@ -66,7 +72,22 @@ namespace Lobby {
 
 			this.addButton.gameObject.SetActive( true );
 			this.waitButton.gameObject.SetActive( false );
-
+			
+		}
+		
+		public void Update() {
+			
+			// プレイヤープレハブを洗い出し、参加者として表示
+			// TODO もっといい方法があるはず
+			GameObject[] players = GameObject.FindGameObjectsWithTag( "Player" );
+			string str =
+				"参加者人数：" + players.Length + "\n";
+			for( int i = 0 ; i < players.Length ; i++ ) {
+				str += "Player" + i + " Status : " + ( "OK".Equals( players[i].name ) ? "OK" : "WAIT" ) + "\n";
+			}
+			
+			this.MemberText.text = str;
+			
 		}
 
 		/// <summary>
@@ -118,6 +139,8 @@ namespace Lobby {
 				this.addButton.gameObject.SetActive( false );
 				this.waitButton.gameObject.SetActive( true );
 			}
+
+			this.SendServerAddedToClient();
 			
 		}
 		
@@ -125,9 +148,13 @@ namespace Lobby {
 		/// 準備待ちに戻るボタン押下時イベント
 		/// </summary>
 		public void OnClickWaitButton() {
+
 			this.networkLobbyManager.OnLobbyClientExit();
+
 			this.addButton.gameObject.SetActive( true );
 			this.waitButton.gameObject.SetActive( false );
+
+			this.SendServerWaitedToClient();
 
 		}
 
@@ -147,7 +174,37 @@ namespace Lobby {
 			this.afterReception.SetActive( false );
 
 		}
-		
+
+		/// <summary>
+		/// クライアントが準備完了になったことをサーバに送信
+		/// </summary>
+		private void SendServerAddedToClient() {
+
+			// プレイヤープレハブを探し出してOK以外のプレハブ名を一つOKにする
+			GameObject[] players = GameObject.FindGameObjectsWithTag( "Player" );
+			foreach( GameObject player in players ) {
+				if( !"OK".Equals( player.name ) ) {
+					player.name = "OK";
+					break;
+				}
+			}
+
+		}
+
+		/// <summary>
+		/// クライアントが準備待ちになったことをサーバに送信
+		/// </summary>
+		private void SendServerWaitedToClient() {
+			// プレイヤープレハブを探し出してOKのプレハブ名を一つWAITにする
+			GameObject[] players = GameObject.FindGameObjectsWithTag( "Player" );
+			foreach( GameObject player in players ) {
+				if( "OK".Equals( player.name ) ) {
+					player.name = "WAIT";
+					break;
+				}
+			}
+		}
+
 	}
 
 }
