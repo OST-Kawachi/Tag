@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Common;
+﻿using Common;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace Lobby {
@@ -9,12 +7,7 @@ namespace Lobby {
 	/// <summary>
 	/// ロビー制御
 	/// </summary>
-	public class LobbyController : MonoBehaviour {
-
-		/// <summary>
-		/// ロビー管理
-		/// </summary>
-		public NetworkLobbyManager networkLobbyManager;
+	public class LobbyController : LobbyControllerBase {
 		
 		/// <summary>
 		/// 参加前に自分のIPを表示するテキスト
@@ -55,12 +48,7 @@ namespace Lobby {
 		/// 準備待ちに戻るボタン
 		/// </summary>
 		public Button waitButton;
-
-		/// <summary>
-		/// ホストかどうか
-		/// </summary>
-		private bool isHost;
-
+		
 		public void Awake() {
 
 			// 自身のIPv4を取得
@@ -73,6 +61,62 @@ namespace Lobby {
 			this.addButton.gameObject.SetActive( true );
 			this.waitButton.gameObject.SetActive( false );
 			
+			this.startHostAfterAction = () => {
+
+				// オブジェクト切り替え
+				this.beforeReception.SetActive( false );
+				this.afterReception.SetActive( true );
+
+				this.roomIpText.text = "部屋IP：" + this.myIPText.text;
+
+			};
+
+			this.startClientBeforeAction = () => {
+				this.IpAddressOfRoom = this.hostIpInputField.text;
+			};
+
+			this.startClientAfterAction = () => {
+
+				// オブジェクト切り替え
+				this.beforeReception.SetActive( false );
+				this.afterReception.SetActive( true );
+
+				this.roomIpText.text = "部屋IP：" + this.hostIpInputField.text;
+
+			};
+
+			this.getReadyToEnterRoomClientAfterAction = () => {
+
+				// ボタン切り替え
+				this.addButton.gameObject.SetActive( false );
+				this.waitButton.gameObject.SetActive( true );
+				
+				this.SendServerAddedToClient();
+
+			};
+
+			this.enterRoomHostAfterAction = () => {
+
+				this.SendServerAddedToClient();
+
+			};
+
+			this.prepareToEnterRoomClientAfterAction = () => {
+
+				this.addButton.gameObject.SetActive( true );
+				this.waitButton.gameObject.SetActive( false );
+
+				this.SendServerWaitedToClient();
+
+			};
+
+			this.leaveRoomHostAfterAction =
+			this.leaveRoomClientAfterAction = () => {
+				// オブジェクト切り替え
+				this.beforeReception.SetActive( true );
+				this.afterReception.SetActive( false );
+			};
+
 		}
 		
 		public void Update() {
@@ -89,92 +133,42 @@ namespace Lobby {
 			this.MemberText.text = str;
 			
 		}
-
+		
 		/// <summary>
-		/// ホストになるボタン押下時イベント
+		/// ホストで参加ボタン押下時イベント
 		/// </summary>
-		public void OnClickHostButton() {
-
-			NetworkManager.singleton.StartHost();
-
-			// オブジェクト切り替え
-			this.beforeReception.SetActive( false );
-			this.afterReception.SetActive( true );
-			
-			this.isHost = true;
-
-			this.roomIpText.text = "部屋IP：" + this.myIPText.text;
-
+		public void OnClickStartHostButton() {
+			this.StartHost();
 		}
 
 		/// <summary>
-		/// クライアントになるボタン押下時イベント
+		/// クライアントで参加ボタン押下時イベント
 		/// </summary>
-		public void OnClickClientButton() {
-
-			// 入力したIPアドレスを設定
-			NetworkManager.singleton.networkAddress = this.hostIpInputField.text;
-			NetworkManager.singleton.StartClient();
-
-			// オブジェクト切り替え
-			this.beforeReception.SetActive( false );
-			this.afterReception.SetActive( true );
-
-			this.isHost = false;
-
-			this.roomIpText.text = "部屋IP：" + this.hostIpInputField.text;
-
+		public void OnClickStartClientButton() {
+			this.StartClient();
 		}
-
+		
 		/// <summary>
 		/// 準備完了ボタン押下時イベント
 		/// </summary>
-		public void OnClickAddButton() {
-
-			if( this.isHost ) {
-				this.networkLobbyManager.OnLobbyServerPlayersReady();
-			}
-			else {
-				this.networkLobbyManager.OnLobbyClientEnter();
-				this.addButton.gameObject.SetActive( false );
-				this.waitButton.gameObject.SetActive( true );
-			}
-
-			this.SendServerAddedToClient();
-			
+		public void OnClickAddPartyButton() {
+			this.AddParty();			
 		}
 		
 		/// <summary>
 		/// 準備待ちに戻るボタン押下時イベント
 		/// </summary>
-		public void OnClickWaitButton() {
-
-			this.networkLobbyManager.OnLobbyClientExit();
-
-			this.addButton.gameObject.SetActive( true );
-			this.waitButton.gameObject.SetActive( false );
-
-			this.SendServerWaitedToClient();
-
+		public void OnClickPrepareToEnterRoomButton() {
+			this.PrepareToEnterRoom();
 		}
 
 		/// <summary>
 		/// 部屋から出るボタン押下時イベント
 		/// </summary>
-		public void OnClickExitButton() {
-
-			// ネットワークの停止
-			if( this.isHost )
-				NetworkManager.singleton.StopHost();
-			else
-				NetworkManager.singleton.StopClient();
-
-			// オブジェクト切り替え
-			this.beforeReception.SetActive( true );
-			this.afterReception.SetActive( false );
-
+		public void OnClickLeaveRoomButton() {
+			this.LeaveRoom();
 		}
-
+		
 		/// <summary>
 		/// クライアントが準備完了になったことをサーバに送信
 		/// </summary>

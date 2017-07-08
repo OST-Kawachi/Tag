@@ -1,0 +1,82 @@
+@startuml{ class-LobbyControllerBase.png}
+
+title LobbyControllerBaseの使い方
+
+'クラス定義---------------------------------------------------
+
+class LobbyControllerBase {
+
+	# NetworkLobbyManager networkLobbyManager
+	+ StatusEnum Status
+	+ string IpAddressOfRoom
+
+	+ Action startHostBeforeAction
+	+ Action startHostAfterAction
+	+ Action startClientBeforeAction
+	+ Action startClientAfterAction
+	+ Action enterRoomHostBeforeAction
+	+ Action enterRoomHostAfterAction
+	+ Action getReadyToEnterRoomClientBeforeAction
+	+ Action getReadyToEnterRoomClientAfterAction
+	+ Action prepareToEnterRoomClientBeforeAction
+	+ Action prepareToEnterRoomClientAfterAction
+	+ Action leaveRoomHostBeforeAction
+	+ Action leaveRoomHostAfterAction
+	+ Action leaveRoomClientBeforeAction
+	+ Action leaveRoomClientAfterAction
+
+	# void StartHost()
+	# void StartClient()
+	# void AddParty()
+	# void PrepareToEnterRoom()
+	# void LeaveRoom()
+
+}
+
+class LobbyController {
+		
+	+ Text myIPText
+	+ InputField hostIpInputField
+	+ GameObject beforeReception
+	+ GameObject afterReception
+	+ Text roomIpText
+	+ Text MemberText
+	+ Button addButton
+	+ Button waitButton
+
+	+ void Awake()
+	+ void Update()
+
+	+ void OnClickStartHostButton()
+	+ void OnClickStartClientButton()
+	+ void OnClickAddButton()
+	+ void OnClickWaitButton()
+	+ void OnClickExitButton()
+
+}
+note right
+	LobbyControllerBaseのカスタマイズや
+	ボタンなどのイベントメソッドを作成
+end note
+
+
+'関係定義--------------------------------------------------------
+
+LobbyControllerBase -up-|> MonoBehabior
+note right on link
+コンポーネントとしてオブジェクトに付与されるのは
+継承してる子クラス
+end note
+ 
+LobbyController -up-|> LobbyControllerBase
+note right on link
+ボタンのイベントの中でこれら関数を呼ぶ
+end note
+
+LobbyController -right-* TempController
+note left on link
+外侮クラスからコールバックを作成できるが
+LobbyController内で作成するのがベター
+end note
+
+@enduml

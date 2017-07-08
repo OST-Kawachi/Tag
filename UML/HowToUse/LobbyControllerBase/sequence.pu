@@ -1,0 +1,73 @@
+@startuml
+
+title LobbyControllerBaseの使い方
+
+hide footbox
+
+participant LobbyController
+participant LobbyControllerBase
+
+[-> LobbyController : OnClickStartHost() または OnClickStartClient()
+activate LobbyController
+opt 未参加の場合のみ
+note over of LobbyController
+事前にLobbyControllerBase.IpAddressOfRoomに
+IPアドレスを登録しておく必要がある
+end note
+LobbyController -> LobbyControllerBase : StartHost() または StartClient()
+activate LobbyControllerBase
+note right of LobbyControllerBase
+ホストまたはクライアント
+で参加している状態になる
+end note
+LobbyController <-- LobbyControllerBase
+deactivate LobbyControllerBase
+deactivate LobbyController
+end
+
+[-> LobbyController : OnClickAddButton()
+activate LobbyController
+opt ホストまたはクライアントで参加している場合のみ
+LobbyController -> LobbyControllerBase : AddParty()
+activate LobbyControllerBase
+note right of LobbyControllerBase
+ホストなら本編開始
+クライアントなら開始待ち状態になる
+end note
+LobbyController <-- LobbyControllerBase
+deactivate LobbyControllerBase
+deactivate LobbyController
+end
+
+[-> LobbyController : OnClickWaitButton()
+activate LobbyController
+opt クライアントで参加し、開始待ちの場合のみ
+LobbyController -> LobbyControllerBase : PrepareToEnterRoom()
+activate LobbyControllerBase
+note right of LobbyControllerBase
+クライアントで参加している状態になる
+end note
+LobbyController <-- LobbyControllerBase
+deactivate LobbyControllerBase
+deactivate LobbyController
+end
+
+[-> LobbyController : OnClickExitButton
+activate LobbyController
+opt ホストまたはクライアントで参加している場合のみ
+note over of LobbyController
+クライアントの場合、開始待ち状態では発火しないので、
+いったん参加待ちの状態に戻してからイベントを呼ぶ
+一度に呼びたい場合はコールバックでイベントを発火させる
+end note
+LobbyController -> LobbyControllerBase : LeaveRoom()
+activate LobbyControllerBase
+note right of LobbyControllerBase
+未参加の状態になる
+end note
+LobbyController <-- LobbyControllerBase
+deactivate LobbyControllerBase
+deactivate LobbyController
+end
+
+@enduml
