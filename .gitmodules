@@ -1,0 +1,3 @@
+[submodule "Tag/Assets/Graphics"]
+	path = Tag/Assets/Graphics
+	url = ../TagGraphics.git
